@@ -1,0 +1,18 @@
+Project Overview
+
+Web application will make use of a MySQL database consisting of 1,289 different Oldschool Runescape
+item combinations that produce tradeable items.  12 categories for items, some items exist in 
+multiple categories due to their uses.
+
+DB Data
+
+Types: 12 different categories of item combination data for use in web application
+Entities: 1,289 separate item combinations denoted by the names of their produced item
+
+DB use cases
+
+Market monitoring for profitable methods to level skills, or just gain money.
+How much profit might I make by creating a certain item?
+How much would it cost to make n many items?
+Certain combinations work with different mathematical equations to determine profit/loss, application
+calculates with those different equations depending on category/item.
