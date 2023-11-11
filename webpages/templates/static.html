@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>JS Static Webpage</title>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+				text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>James Shaw Static Webpage</h1>
+        <h2>Recipe Table</h2>
+        <table>
+           <tr>
+            <th>RecipeID</th>
+            <th>RecipeName</th>
+            <th>AmtProduced</th>
+            <th>SkillLvl</th>
+            <th>SkillName</th>
+           </tr>
+           {% for key, value in recipes.items() %}
+            <tr>
+                <td>{{ value['recipeid'] }}</td>
+                <td>{{ key }}</td>
+                <td>{{ value['amount'] }}</td>
+                <td>{{ value['level'] }}</td>
+                <td>{{ value['skill'] }}</td>
+            </tr>
+           {% endfor %}
+        </table>
+    </body>
+</html>

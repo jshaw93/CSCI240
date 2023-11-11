@@ -1,0 +1,32 @@
+{
+    "Cannonballs": {
+        "recipeid": 1,
+        "amount": 4,
+        "level": 32,
+        "skill": "Smithing"
+    },
+    "Rune 2h": {
+        "recipeid": 2,
+        "amount": 1,
+        "level": 99,
+        "skill": "Smithing"
+    },
+    "Steel Bar": {
+        "recipeid": 3,
+        "amount": 1,
+        "level": 30,
+        "skill": "Smithing"
+    },
+    "Runite Bar": {
+        "recipeid": 4,
+        "amount": 1,
+        "level": 85,
+        "skill": "Smithing"
+    },
+    "Cake": {
+        "recipeid": "5",
+        "amount": "1",
+        "level": "32",
+        "skill": "Cooking"
+    }
+}
