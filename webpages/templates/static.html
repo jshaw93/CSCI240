@@ -20,13 +20,13 @@
             <th>SkillLvl</th>
             <th>SkillName</th>
            </tr>
-           {% for key, value in recipes.items() %}
+           {% for recipe in recipes %}
             <tr>
-                <td>{{ value['recipeid'] }}</td>
-                <td>{{ key }}</td>
-                <td>{{ value['amount'] }}</td>
-                <td>{{ value['level'] }}</td>
-                <td>{{ value['skill'] }}</td>
+                <td>{{ recipe[0] }}</td>
+                <td>{{ recipe[2] }}</td>
+                <td>{{ recipe[3] }}</td>
+                <td>{{ recipe[5] }}</td>
+                <td>{{ recipe[6] }}</td>
             </tr>
            {% endfor %}
         </table>

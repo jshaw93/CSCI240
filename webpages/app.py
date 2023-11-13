@@ -1,7 +1,17 @@
-from flask import Flask, render_template, url_for, request, redirect
-import json
+from flask import Flask, render_template, request, redirect
+import json, os
+from dotenv import load_dotenv
+import mysql.connector
+
+load_dotenv()
 
 app = Flask(__name__)
+db = mysql.connector.connect(
+    host=os.getenv('DBHOST'),
+    user=os.getenv('DBUSER'),
+    password=os.getenv('DBPASS'),
+    database=os.getenv('DB')
+)
 
 with open('recipes.json', 'r') as myFile:
     recipesRaw = json.load(myFile)
@@ -28,7 +38,12 @@ def index():
 
 @app.route('/table')
 def table():
-    return render_template('static.html', recipes=recipesRaw)
+    cursor = db.cursor()
+    query = ("select * from Recipe")
+    cursor.execute(query)
+    recipes = cursor.fetchall()
+    cursor.close()
+    return render_template('static.html', recipes=recipes)
 
 if __name__ == '__main__':\
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='192.168.1.44', port=5000)
