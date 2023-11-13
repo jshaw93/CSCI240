@@ -39,7 +39,7 @@ def index():
 @app.route('/table')
 def table():
     cursor = db.cursor()
-    query = ("select * from Recipe")
+    query = ("select RecipeID, RecipeName, AmtProduced, SkillLvl, SkillName from Recipe")
     cursor.execute(query)
     recipes = cursor.fetchall()
     cursor.close()
