@@ -57,11 +57,11 @@ def table():
     insertcheck = '' in compile
     if request.args.get('delete') == 'true':
         deleteID = request.args.get('id')
-        cursor.execute('delete from Item where ItemID=%s', (deleteID, ))
+        cursor.execute('delete from Item where ItemID=%s;', (deleteID, ))
         db.commit()
     elif not insertcheck and request.args.get('insert') == 'true':
         insert = """insert into Item
-        values (%s, %s, %s)"""
+        values (%s, %s, %s);"""
         cursor.execute(insert, compile)
         db.commit()
     query = ("select * from Item")

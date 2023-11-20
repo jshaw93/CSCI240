@@ -6,8 +6,8 @@
     <body>
         <form action="">
             <input type="hidden" name="update" value="true">
-            <label for="itemid">Item ID:</label>
-            <input type="text" name="itemid" id="itemid" value="{{ itemid }}">
+            <label for="itemid">Item ID: {{ itemid }}</label>
+            <input type="hidden" name="itemid" id="itemid" value="{{ itemid }}">
             <label for="itemmembs">Members:</label>
             <input type="checkbox" name="itemmembs" id="itemmembs" {{ 'checked="checked"' if itemmembs else ""}}>
             <label for="itemalch">Alch value:</label>
