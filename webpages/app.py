@@ -6,44 +6,70 @@ import mysql.connector
 load_dotenv()
 
 app = Flask(__name__)
-db = mysql.connector.connect(
-    host=os.getenv('DBHOST'),
-    user=os.getenv('DBUSER'),
-    password=os.getenv('DBPASS'),
-    database=os.getenv('DB')
-)
 
 with open('recipes.json', 'r') as myFile:
     recipesRaw = json.load(myFile)
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    if request.method == 'POST':
-        name = request.form['recipename']
-        recipeid = request.form['recipeid']
-        amount = request.form['recipeamount']
-        level = request.form['recipelevel']
-        skill = request.form['recipeskill']
-        recipesRaw.update({name: {
-            "recipeid": recipeid,
-            "amount": amount,
-            "level": level,
-            "skill": skill
-        }})
-        with open('recipes.json', 'w') as myFile:
-            json.dump(recipesRaw, myFile, indent=4)
-        return redirect('/table')
-    else:
-        return render_template('index.html')
-
-@app.route('/table')
-def table():
+@app.route('/update', methods=['GET'])
+def update():
+    db = mysql.connector.connect(
+        host=os.getenv('DBHOST'),
+        user=os.getenv('DBUSER'),
+        password=os.getenv('DBPASS'),
+        database=os.getenv('DB')
+    )
+    changeid = request.args.get('id')
+    itemid = request.args.get('itemid')
+    membs = "1" if request.args.get('itemmembs') == 'on' else "0"
+    alch = request.args.get('itemalch')
+    compile = (itemid, membs, alch)
+    insertcheck = '' in compile
+    if id == '':
+        return "Error, id not specified"
+    elif not insertcheck and request.args.get('update') == 'true':
+        cursor = db.cursor()
+        cursor.execute('update Item set ItemID=%s, Membs=%s, Alch=%s where ItemID=%s;', (itemid, membs, alch, itemid))
+        db.commit()
+        cursor.close()
+        db.close()
+        return redirect('/')
     cursor = db.cursor()
-    query = ("select RecipeID, RecipeName, AmtProduced, SkillLvl, SkillName from Recipe")
-    cursor.execute(query)
-    recipes = cursor.fetchall()
+    cursor.execute('select * from Item where ItemID=%s;', (changeid, ))
+    item = cursor.fetchone()
+    print(item)
     cursor.close()
-    return render_template('static.html', recipes=recipes)
+    db.close()
+    return render_template('index.html', itemid = item[0], itemmembs=item[1], itemalch = item[2])
 
-if __name__ == '__main__':\
+@app.route('/', methods=['GET'])
+def table():
+    db = mysql.connector.connect(
+        host=os.getenv('DBHOST'),
+        user=os.getenv('DBUSER'),
+        password=os.getenv('DBPASS'),
+        database=os.getenv('DB')
+    )
+    cursor = db.cursor()
+    itemid = request.args.get('itemid')
+    membs = "1" if request.args.get('itemmembs') == 'on' else "0"
+    alch = request.args.get('itemalch')
+    compile = (itemid, membs, alch)
+    insertcheck = '' in compile
+    if request.args.get('delete') == 'true':
+        deleteID = request.args.get('id')
+        cursor.execute('delete from Item where ItemID=%s', (deleteID, ))
+        db.commit()
+    elif not insertcheck and request.args.get('insert') == 'true':
+        insert = """insert into Item
+        values (%s, %s, %s)"""
+        cursor.execute(insert, compile)
+        db.commit()
+    query = ("select * from Item")
+    cursor.execute(query)
+    items = cursor.fetchall()
+    cursor.close()
+    db.close()
+    return render_template('static.html', items=items)
+
+if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
