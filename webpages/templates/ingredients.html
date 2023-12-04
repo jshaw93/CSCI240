@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ingredients</title>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+				text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>New Ingredient</h2>
+        <form action="">
+            <input type="hidden" name="insert" value="true">
+            <input type="hidden" name="id" id="id" value="{{ ingid }}">
+            <input type="hidden" name="ingid" id="ingid" value="{{ ingid }}">
+            <label for="itemid">Item ID:</label>
+            <input type="text" name="itemid" id="itemid">
+            <label for="quantity">Quantity</label>
+            <input type="text" name="quantity" id="quantity">
+            <input type="submit" value="Add Item">
+        </form>
+        <h2>Ingredients for {{ recipename }}</h2>
+        <table>
+            <tr>
+                <th>Ingredient ID</th>
+                <th>Quantity</th>
+                <th>Maintenance</th>
+            </tr>
+            {% for ingredient in ingredients %}
+                <tr>
+                    <td><a href="/?itemid={{ ingredient[1] }}&search=true">{{ ingredient[1] }}</a></td>
+                    <td>{{ ingredient[2] }}</td>
+                    <td>
+                        <a href="?delete=true&id={{ ingredient[0] }}&itemid={{ ingredient[1] }}">Delete</a><br/>
+                        <a href="/updateingredient?id={{ ingredient[0] }}&iid={{ ingredient[1] }}">Change</a><br/>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>

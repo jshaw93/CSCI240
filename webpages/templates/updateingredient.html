@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Update Ingredient</title>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+				text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <form action="">
+            <input type="hidden" name="update" value="true">
+            <input type="hidden" name="id" value="{{ ingid }}">
+            <label for="iid">Item ID:</label>
+            <input type="text" name="iid" id="iid" value="{{ itemid }}">
+            <input type="hidden" name="ciid" id="ciid" value="{{ itemid }}">
+            <label for="ingquant">Quantity:</label>
+            <input type="text" name="ingquant" id="ingquant" value="{{ ingquant }}">
+            <input type="submit" value="Update">
+        </form>
+    </body>
+</html>

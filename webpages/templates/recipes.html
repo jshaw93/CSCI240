@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Recipes</title>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+				text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Recipes Table</h2>
+        <table>
+            <tr>
+                <th>Recipe Name</th>
+                <th>Amount Produced</th>
+                <th>Ingredients</th>
+                <th>Level Required</th>
+                <th>Skill/Category</th>
+                <th>Maintenance</th>
+            </tr>
+            {% for recipe in recipes %}
+                <tr>
+                    <td>{{ recipe[2] }}</td>
+                    <td>{{ recipe[3] }}</td>
+                    <td><a href="/ingredients?id={{ recipe[4] }}">Ingredients</a></td>
+                    <td>{{ recipe[5] }}</td>
+                    <td>{{ recipe[6] }}</td>
+                    <td>
+                        <a href="?delete=true&id={{ recipe[0] }}">Delete</a><br/>
+                        <a href="/updaterecipe?id={{ recipe[0] }}">Change</a><br/>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>

@@ -26,7 +26,8 @@
                 <td>{{ item[2] }}</td>
                 <td>
                     <a href="?delete=true&id={{ item[0] }}">Delete</a><br/>
-                    <a href="/update?id={{ item[0] }}">Change</a>
+                    <a href="/updateitem?id={{ item[0] }}">Change</a><br/>
+                    <a href="/recipes?id={{ item[0] }}">Recipes</a>
                 </td>
             </tr>
            {% endfor %}

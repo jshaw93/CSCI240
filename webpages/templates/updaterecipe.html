@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Update Recipes</title>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+				text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <form action="">
+            <input type="hidden" name="update" value="true">
+            <input type="hidden" name="id" value="{{ itemid }}">
+            <input type="hidden" name="recname" id="recname" value="{{ recipename }}">
+            <p>Recipe Name: {{ recipename }}<p>
+            <input type="hidden" name="recid" id="recid" value="{{ recid }}">
+            <input type="hidden" name="recitemid" id="recitemid" value="{{ itemid }}">
+            <label for="recprod">Amount Produced:</label>
+            <input type="text" name="recprod" id="recprod" value="{{ produced }}">
+            <input type="hidden" name="recingid" id="recingid" value="{{ ingid }}">
+            <label for="reclvl">Level Required:</label>
+            <input type="text" name="reclvl" id="reclvl" value="{{ lvl }}">
+            <label for="reccat">Category:</label>
+            <input type="text" name="reccat" id="reccat" value="{{ cat }}">
+            <input type="submit" value="Update">
+        </form>
+    </body>
+</html>
