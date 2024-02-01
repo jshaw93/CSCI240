@@ -8,10 +8,7 @@ load_dotenv()
 
 app = Flask(__name__)
 
-LIMIT = 10
-
-with open('recipes.json', 'r') as myFile:
-    recipesRaw = json.load(myFile)
+LIMIT = 15
 
 @app.route('/updateitem', methods=['GET'])
 def update():
@@ -56,6 +53,7 @@ def table():
     search = request.args.get('search') == 'true'
     membs = "1" if request.args.get('itemmembs') == 'on' else "0"
     alch = request.args.get('itemalch')
+    itemname = None if request.args.get('itemname') == '' else request.args.get('itemname')
     compile = (itemid, membs, alch)
     insertcheck = '' in compile
     if request.args.get('delete') == 'true':
@@ -64,8 +62,8 @@ def table():
         db.commit()
     elif not insertcheck and request.args.get('insert') == 'true':
         insert = """insert into Item
-        values (%s, %s, %s);"""
-        cursor.execute(insert, compile)
+        values (%s, %s, %s, %s);"""
+        cursor.execute(insert, (itemid, membs, alch, itemname))
         db.commit()
     elif itemid != '' and search:
         cursor.execute('select * from Item where ItemID=%s;', (itemid, ))
@@ -105,7 +103,7 @@ def recipes():
     recipes = cursor.fetchall()
     return render_template('recipes.html', recipes=recipes)
 
-
+       
 @app.route('/updaterecipe', methods=['GET'])
 def updaterecipe():
     db = mysql.connector.connect(
@@ -129,7 +127,7 @@ def updaterecipe():
     if changeid == '':
         return "Error, id not specified"
     elif not updatecheck and request.args.get('update') == 'true':
-        if reccat not in cats:
+        if reccat.lower() not in cats:
             return 'Error, category does not exist.  Please chose from this list: "item sets", "crafting", "smithing", "farming", "herblore", "decanting", "magic", "cooking", "misc", "fletching", "construction"'
         statement = 'update Recipe set RecipeID=%s, ItemCreatedID=%s, RecipeName=%s, AmtProduced=%s, ItemRecipeID=%s, SkillLvl=%s, SkillName=%s where RecipeID=%s;'
         cursor = db.cursor()
@@ -170,7 +168,9 @@ def ingredients():
         statement = 'insert into ItemRecipe values (%s, %s, %s);'
         cursor.execute(statement, compile)
         db.commit()
-    statement = 'select * from ItemRecipe where ItemRecipeID=%s;'
+    statement = '''select ir.ItemRecipeID, ir.ItemID, ir.Quantity, i.ItemName from ItemRecipe ir
+    inner join Item i on ir.ItemID=i.ItemID
+    where ir.ItemRecipeID=%s;'''
     cursor.execute(statement, (ingid, ))
     items = cursor.fetchall()
     cursor.close()

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>JS Static Webpage</title>
+        <title>JS Dynamic Webpage</title>
         <style>
             table, th, td {
                 border: 1px solid black;
@@ -10,11 +10,13 @@
         </style>
     </head>
     <body>
-        <h1>James Shaw Static Webpage</h1>
+        <h1>James Shaw Dynamic Webpage</h1>
+        <a href="/recipes">Recipes</a>
         <h2>Items Table</h2>
         <table>
            <tr>
             <th>ItemID</th>
+            <th>Name</th>
             <th>Members</th>
             <th>Alch value</th>
             <th>Maintenance</th>
@@ -22,6 +24,7 @@
            {% for item in items %}
             <tr>
                 <td>{{ item[0] }}</td>
+                <td>{{ item[3] }}</td>
                 <td>{{ "True" if item[1] else "False" }}</td>
                 <td>{{ item[2] }}</td>
                 <td>
@@ -37,6 +40,8 @@
             <input type="hidden" name="insert" value="true">
             <label for="itemid">Item ID:</label>
             <input type="text" name="itemid" id="itemid">
+            <label for="itemname">Item Name:</label>
+            <input type="text" name="itemname" id="itemname">
             <label for="itemmembs">Members:</label>
             <input type="checkbox" name="itemmembs" id="itemmembs">
             <label for="itemalch">Alch value:</label>

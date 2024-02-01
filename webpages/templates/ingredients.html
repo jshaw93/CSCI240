@@ -11,6 +11,8 @@
     </head>
     <body>
         <h2>New Ingredient</h2>
+        <a href="/recipes">Recipes</a><br/>
+        <a href="/">Items</a>
         <form action="">
             <input type="hidden" name="insert" value="true">
             <input type="hidden" name="id" id="id" value="{{ ingid }}">
@@ -25,12 +27,14 @@
         <table>
             <tr>
                 <th>Ingredient ID</th>
+                <th>Ingredient Name</th>
                 <th>Quantity</th>
                 <th>Maintenance</th>
             </tr>
             {% for ingredient in ingredients %}
                 <tr>
-                    <td><a href="/?itemid={{ ingredient[1] }}&search=true">{{ ingredient[1] }}</a></td>
+                    <td>{{ ingredient[1] }}</td>
+                    <td><a href="/?itemid={{ ingredient[1] }}&search=true">{{ ingredient[3] }}</a></td>
                     <td>{{ ingredient[2] }}</td>
                     <td>
                         <a href="?delete=true&id={{ ingredient[0] }}&itemid={{ ingredient[1] }}">Delete</a><br/>
