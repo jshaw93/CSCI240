@@ -6,9 +6,9 @@ import mysql.connector
 
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, '/static')
 
-LIMIT = 15
+LIMIT = 150
 
 @app.route('/updateitem', methods=['GET'])
 def update():
@@ -71,8 +71,8 @@ def table():
         cursor.close()
         db.close()
         return render_template('static.html', items=items)
-    query = ("select * from Item order by ItemID limit %s;")
-    cursor.execute(query, (LIMIT, ))
+    query = ("select * from Item order by ItemID;")
+    cursor.execute(query)
     items = cursor.fetchall()
     cursor.close()
     db.close()

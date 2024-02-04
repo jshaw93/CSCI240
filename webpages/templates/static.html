@@ -1,52 +1,59 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>JS Dynamic Webpage</title>
+        <title>OSRS Combinations</title>
         <style>
             table, th, td {
                 border: 1px solid black;
 				text-align: center;
             }
         </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+        <script type="text/javascript" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     </head>
     <body>
-        <h1>James Shaw Dynamic Webpage</h1>
-        <a href="/recipes">Recipes</a>
+        <h1>OSRS Combinations</h1>
         <h2>Items Table</h2>
-        <table>
-           <tr>
-            <th>ItemID</th>
-            <th>Name</th>
-            <th>Members</th>
-            <th>Alch value</th>
-            <th>Maintenance</th>
-           </tr>
-           {% for item in items %}
-            <tr>
-                <td>{{ item[0] }}</td>
-                <td>{{ item[3] }}</td>
-                <td>{{ "True" if item[1] else "False" }}</td>
-                <td>{{ item[2] }}</td>
-                <td>
-                    <a href="?delete=true&id={{ item[0] }}">Delete</a><br/>
-                    <a href="/updateitem?id={{ item[0] }}">Change</a><br/>
-                    <a href="/recipes?id={{ item[0] }}">Recipes</a>
-                </td>
-            </tr>
-           {% endfor %}
+        <table id="itemtable" class="display">
+            <thead>
+                <tr>
+                    <th>ItemID</th>
+                    <th>Name</th>
+                    <th>Members</th>
+                    <th>Alch value</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                    <tr>
+                        <td>{{ item[0] }}</td>
+                        <td>{{ item[3] }}</td>
+                        <td>{{ "True" if item[1] else "False" }}</td>
+                        <td>{{ item[2] }}</td>
+                    </tr>
+                {% endfor %}
+        </tbody>
         </table>
-        <h2>New item</h2>
-        <form action="">
-            <input type="hidden" name="insert" value="true">
-            <label for="itemid">Item ID:</label>
-            <input type="text" name="itemid" id="itemid">
-            <label for="itemname">Item Name:</label>
-            <input type="text" name="itemname" id="itemname">
-            <label for="itemmembs">Members:</label>
-            <input type="checkbox" name="itemmembs" id="itemmembs">
-            <label for="itemalch">Alch value:</label>
-            <input type="text" name="itemalch" id="itemalch">
-            <input type="submit" value="Add Item">
-        </form>
+        <script type="text/javascript">
+            $(document).ready( function () {
+                $('#itemtable').DataTable({
+                    "columnDefs": [
+                        {
+                            "render": function(data, type, row) {
+                                return commaSeparateNumber(data);
+                            },
+                            "targets": [3]
+                        },
+                    ]
+                });
+            } );
+            function commaSeparateNumber(val) {
+                while (/(\d+)(\d{3})/.test(val.toString())) {
+                     val = val.toString().replace(/(\d+)(\d{3})/, '$1' + ',' + '$2');
+                }
+                return val;
+            }
+        </script>
     </body>
 </html>
