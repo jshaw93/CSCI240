@@ -76,7 +76,7 @@ def recipes():
         deleteID = request.args.get('id')
         cursor.execute('delete from Recipe where RecipeID=%s;', (deleteID, ))
         db.commit()
-    statement = 'select * from Recipe order by RecipeID;'
+    statement = 'select * from Recipe where SkillName!="barrows" order by RecipeID;'
     cursor.execute(statement)
     recipes = cursor.fetchall()
     newRecipes = []
