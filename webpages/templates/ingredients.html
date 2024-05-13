@@ -8,40 +8,62 @@
 				text-align: center;
             }
         </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+        <script type="text/javascript" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     </head>
     <body>
-        <h2>New Ingredient</h2>
-        <a href="/recipes">Recipes</a><br/>
-        <a href="/">Items</a>
-        <form action="">
-            <input type="hidden" name="insert" value="true">
-            <input type="hidden" name="id" id="id" value="{{ ingid }}">
-            <input type="hidden" name="ingid" id="ingid" value="{{ ingid }}">
-            <label for="itemid">Item ID:</label>
-            <input type="text" name="itemid" id="itemid">
-            <label for="quantity">Quantity</label>
-            <input type="text" name="quantity" id="quantity">
-            <input type="submit" value="Add Item">
-        </form>
+        <a href="/">Recipes</a><br/>
+        <a href="/items">Items</a><br/>
+        <a href="/barrows">Barrows</a>
         <h2>Ingredients for {{ recipename }}</h2>
-        <table>
-            <tr>
-                <th>Ingredient ID</th>
-                <th>Ingredient Name</th>
-                <th>Quantity</th>
-                <th>Maintenance</th>
-            </tr>
-            {% for ingredient in ingredients %}
+        <table id="ingtable" class="display">
+            <thead>
                 <tr>
-                    <td>{{ ingredient[1] }}</td>
-                    <td><a href="/?itemid={{ ingredient[1] }}&search=true">{{ ingredient[3] }}</a></td>
-                    <td>{{ ingredient[2] }}</td>
-                    <td>
-                        <a href="?delete=true&id={{ ingredient[0] }}&itemid={{ ingredient[1] }}">Delete</a><br/>
-                        <a href="/updateingredient?id={{ ingredient[0] }}&iid={{ ingredient[1] }}">Change</a><br/>
-                    </td>
+                    <th>Ingredient ID</th>
+                    <th>Ingredient Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                    <th>GE Tracker</th>
                 </tr>
-            {% endfor %}
+            </thead>
+            <tbody>
+                {% for ingredient in ingredients %}
+                    <tr>
+                        <td>{{ ingredient[1] }}</td>
+                        <td><a href="/?itemid={{ ingredient[1] }}&search=true">{{ ingredient[3] }}</a></td>
+                        <td>{{ ingredient[2] }}</td>
+                        <td>{{ ingredient[4] }}</td>
+                        <td>{{ ingredient[2] * ingredient[4] }}</td>
+                        <td><a href="https://www.ge-tracker.com/item/{{ ingredient[1] }}" target="_blank">Link</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
+        <script type="text/javascript">
+            $(document).ready( function () {
+                $('#ingtable').DataTable({
+                    "columnDefs": [
+                        {
+                            "render": function(data, type, row) {
+                                return commaSeparateNumber(data);
+                            },
+                            "targets": [2, 3, 4]
+                        },
+                        {
+                            "type": "currency",
+                            "targets": [2, 3, 4]
+                        }
+                    ]
+                });
+            } );
+            function commaSeparateNumber(val) {
+                while (/(\d+)(\d{3})/.test(val.toString())) {
+                     val = val.toString().replace(/(\d+)(\d{3})/, '$1' + ',' + '$2');
+                }
+                return val;
+            }
+        </script>
     </body>
 </html>
