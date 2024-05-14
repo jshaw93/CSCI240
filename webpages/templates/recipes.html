@@ -46,6 +46,19 @@
                     </tr>
                 {% endfor %}
             </tbody>
+            <tfoot>
+                <tr>
+                    <th>Recipe Name</th>
+                    <th>Amount Produced</th>
+                    <th>Cost</th>
+                    <th>Sell At</th>
+                    <th>Profit</th>
+                    <th>Ingredients</th>
+                    <th>Level Required</th>
+                    <th>Skill/Category</th>
+                    <th></th>
+                </tr>
+            </tfoot>
         </table>
         <script type="text/javascript">
             $(document).ready( function () {
@@ -61,7 +74,23 @@
                             "type": "currency",
                             "targets": [2, 3, 4]
                         }
-                    ]
+                    ],
+                    initComplete: function() {
+                        this.api()
+                            .columns()
+                            .every(function () {
+                                let column = this;
+                                let title = column.footer().textContent;
+                                let input = document.createElement('input');
+                                input.placeholder = title;
+                                column.footer().replaceChildren(input);
+                                input.addEventListener('keyup', () => {
+                                    if (column.search() !== this.value) {
+                                        column.search(input.value).draw();
+                                    }
+                                });
+                            });
+                    }
                 });
             } );
             function commaSeparateNumber(val) {
