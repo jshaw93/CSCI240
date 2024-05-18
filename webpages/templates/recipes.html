@@ -25,6 +25,7 @@
                     <th>Cost</th>
                     <th>Sell At</th>
                     <th>Profit</th>
+                    <th>Alch Profit</th>
                     <th>Ingredients</th>
                     <th>Level Required</th>
                     <th>Skill/Category</th>
@@ -39,6 +40,7 @@
                         <td>{{ recipe[9] }}</td>
                         <td>{{ recipe[8] }}</td>
                         <td>{{ recipe[7] }}</td>
+                        <td>{{ recipe[10] }}</td>
                         <td><a href="/ingredients?id={{ recipe[4] }}&recipename={{ recipe[2].capitalize() }}">Ingredients</a></td>
                         <td>{{ recipe[5] }}</td>
                         <td>{{ recipe[6] }}</td>
@@ -53,6 +55,7 @@
                     <th>Cost</th>
                     <th>Sell At</th>
                     <th>Profit</th>
+                    <th>Alch Profit</th>
                     <th>Ingredients</th>
                     <th>Level Required</th>
                     <th>Skill/Category</th>
@@ -68,11 +71,11 @@
                             "render": function(data, type, row) {
                                 return commaSeparateNumber(data);
                             },
-                            "targets": [2, 3, 4]
+                            "targets": [2, 3, 4, 5]
                         },
                         {
                             "type": "currency",
-                            "targets": [2, 3, 4]
+                            "targets": [2, 3, 4, 5]
                         }
                     ],
                     initComplete: function() {

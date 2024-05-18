@@ -40,14 +40,6 @@ def table():
         database=os.getenv('DB')
     )
     cursor = db.cursor()
-    itemid = request.args.get('itemid')
-    search = request.args.get('search') == 'true'
-    if itemid != '' and search:
-        cursor.execute('select * from Item where ItemID=%s;', (itemid, ))
-        items = cursor.fetchall()
-        cursor.close()
-        db.close()
-        return render_template('items.html', items=items)
     query = ("select * from Item order by ItemID;")
     cursor.execute(query)
     items = cursor.fetchall()
@@ -58,6 +50,7 @@ def table():
 
 @app.route('/', methods=['GET'])
 def recipes():
+    nature = getLowCost(561)
     db = mysql.connector.connect(
         host=os.getenv('DBHOST'),
         user=os.getenv('DBUSER'),
@@ -65,16 +58,6 @@ def recipes():
         database=os.getenv('DB')
     )
     cursor = db.cursor()
-    itemid = request.args.get('id')
-    if itemid is not None and request.args.get('delete') != 'true':
-        statement = 'select * from Recipe where ItemCreatedID=%s;'
-        cursor.execute(statement, (itemid, ))
-        recipes = cursor.fetchall()
-        return render_template('recipes.html', recipes=recipes)
-    elif request.args.get('delete') == 'true':
-        deleteID = request.args.get('id')
-        cursor.execute('delete from Recipe where RecipeID=%s;', (deleteID, ))
-        db.commit()
     statement = 'select * from Recipe where SkillName!="barrows" order by RecipeID;'
     cursor.execute(statement)
     recipes = cursor.fetchall()
@@ -88,6 +71,10 @@ def recipes():
         sells = getProfit(recipeID, recipeAmt, ingredients)
         for i in sells:
             recipe.append(i)
+        alchquery = ('select Alch from Item where ItemID=%s')
+        cursor.execute(alchquery, (recipeID, ))
+        alch = cursor.fetchone()[0] - nature - sells[2]
+        recipe.append(alch)
         recipe = tuple(recipe)
         newRecipes.append(recipe)
         
@@ -105,20 +92,6 @@ def ingredients():
     cursor = db.cursor()
     recipename = request.args.get('recipename')
     ingid = request.args.get('id')
-    insertid = request.args.get('ingid')
-    iid = request.args.get('itemid')
-    quantity= request.args.get('quantity')
-    compile = (insertid, iid, quantity)
-    insertcheck = '' in compile
-    if request.args.get('delete') == 'true':
-        deleteID = request.args.get('id')
-        print(deleteID, iid)
-        cursor.execute('delete from ItemRecipe where ItemRecipeID=%s and ItemID=%s;', (deleteID, iid))
-        db.commit()
-    elif request.args.get('insert') == 'true' and not insertcheck:
-        statement = 'insert into ItemRecipe values (%s, %s, %s);'
-        cursor.execute(statement, compile)
-        db.commit()
     statement = '''select ir.ItemRecipeID, ir.ItemID, ir.Quantity, i.ItemName from ItemRecipe ir
     inner join Item i on ir.ItemID=i.ItemID
     where ir.ItemRecipeID=%s;'''
@@ -186,7 +159,7 @@ def latest():
     """
     url = 'https://prices.runescape.wiki/api/v1/osrs/latest'
     headers = {
-        'User-Agent': '@_.lore OS Combinations discord bot - 1 per 5m'
+        'User-Agent': '@_.lore OS Combinations website - 1 per 5m'
     }
     data = requests.get(url, headers=headers).json()
     return data
