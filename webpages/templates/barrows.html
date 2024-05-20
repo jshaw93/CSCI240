@@ -42,7 +42,7 @@
                         <td>{{ recipe[2].capitalize() }}</td>
                         <td>{{ recipe[3] }}</td>
                         <!-- broken item -->
-                        <td>{{ recipe[10].capitalize() }}</td>
+                        <td><a href="https://www.ge-tracker.com/item/{{ recipe[12] }}">{{ recipe[10].capitalize() }}</a></td>
                         <!-- cost -->
                         <td>{{ recipe[8] }}</td>
                         <!-- goldcost -->
@@ -79,11 +79,11 @@
                             "render": function(data, type, row) {
                                 return commaSeparateNumber(data);
                             },
-                            "targets": [2, 3, 4, 5, 6]
+                            "targets": [3, 4, 5, 6]
                         },
                         {
                             "type": "currency",
-                            "targets": [2, 3, 4, 5, 6]
+                            "targets": [3, 4, 5, 6]
                         }
                     ]
                 });

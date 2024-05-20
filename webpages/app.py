@@ -147,6 +147,7 @@ def barrows():
         profit = getBarrowsData(recipe[1]) - goldcost - brokencost
         recipe.append(profit)
         recipe[5] = lvl
+        recipe.append(brokenid)
         recipe = tuple(recipe)
         barrowsRecipes.append(recipe)
     return render_template('barrows.html', recipes=barrowsRecipes, lvl=lvl)
