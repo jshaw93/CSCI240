@@ -50,7 +50,7 @@ def table():
 
 @app.route('/', methods=['GET'])
 def recipes():
-    nature = getLowCost(561)
+    nature = getLowPrice(561)
     db = mysql.connector.connect(
         host=os.getenv('DBHOST'),
         user=os.getenv('DBUSER'),
@@ -100,7 +100,7 @@ def ingredients():
     newItems = []
     for item in items:
         item = list(item)
-        price = getLowCost(item[1])
+        price = getLowPrice(item[1])
         item.append(price)
         item = tuple(item)
         newItems.append(item)
@@ -139,18 +139,50 @@ def barrows():
         brokenid = ingredients[1][1]
         basegold = ingredients[0][2]
         goldcost = int(basegold * (1 - lvl / 200))
-        brokencost = getLowCost(brokenid)
+        brokencost = getLowPrice(brokenid)
         recipe.append(goldcost)
         recipe.append(brokencost)
-        recipe.append(getBarrowsData(recipe[1]))
+        recipe.append(getHighPrice(recipe[1]))
         recipe.append(getName(brokenid, cursor))
-        profit = getBarrowsData(recipe[1]) - goldcost - brokencost
+        profit = getHighPrice(recipe[1]) - goldcost - brokencost
         recipe.append(profit)
         recipe[5] = lvl
         recipe.append(brokenid)
         recipe = tuple(recipe)
         barrowsRecipes.append(recipe)
     return render_template('barrows.html', recipes=barrowsRecipes, lvl=lvl)
+
+
+@app.route("/flips", methods=["GET"])
+def flips():
+    items = []
+    db = mysql.connector.connect(
+        host=os.getenv('DBHOST'),
+        user=os.getenv('DBUSER'),
+        password=os.getenv('DBPASS'),
+        database=os.getenv('DB')
+    )
+    cursor = db.cursor()
+    query = ('select * from Item')
+    cursor.execute(query)
+    itemResult = cursor.fetchall()
+    for item in itemResult:
+        # Structure (name, low, high, margin, alch, id, membs)
+        itemID = item[0]
+        low = getLowPrice(itemID)
+        high = getHighPrice(itemID)
+        if low is None or high is None:
+            continue
+        alch = item[2]
+        name = item[3]
+        if '3rd age' in name:
+            continue
+        membs = item[1]
+        membs = "Yes" if membs == 1 else "No"
+        margin = round((high - low) - high * 0.1) - 1
+        alchProfit = alch - low
+        items.append((name, low, high, margin, alch, itemID, membs, alchProfit))
+    return render_template('flips.html', items=items)
 
 
 def latest():
@@ -183,7 +215,7 @@ def getProfit(recipeID, recipeAmt, ingredients):
             recipeCost += ing[2]
             continue
         try:
-            l = getLowCost(ing[1])
+            l = getLowPrice(ing[1])
             if l is None:
                 recipeCost += 0
             else:
@@ -199,7 +231,7 @@ def getProfit(recipeID, recipeAmt, ingredients):
     return (recipeSell, sellAt, recipeCost)
 
 
-def getLowCost(itemID):
+def getLowPrice(itemID):
     cost = None
     try:
         cost = int(priceData['data'][str(itemID)]['low'])
@@ -208,10 +240,10 @@ def getLowCost(itemID):
     return cost
 
 
-def getBarrowsData(recipeID):
+def getHighPrice(itemID):
     sell = None
     try:
-        sell = int(priceData['data'][str(recipeID)]['high'])
+        sell = int(priceData['data'][str(itemID)]['high'])
     except KeyError:
         pass
     return sell

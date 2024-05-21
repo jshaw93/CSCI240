@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Recipes</title>
+        <title>Flips</title>
         <style>
             table, th, td {
                 border: 1px solid black;
@@ -14,69 +14,67 @@
         <script type="text/javascript" src="//cdn.datatables.net/plug-ins/2.0.7/sorting/currency.js"></script>
     </head>
     <body>
-        <h2>Recipes Table</h2>
+        <h1>Item Flipping & Alching</h1>
         <a href="/items">Items</a><br/>
-        <a href="/barrows">Barrows</a><br/>
-        <a href="/flips">Flipping & Alching</a>
-        <table id="recipetable" class="display">
+        <a href="/">Recipes</a><br/>
+        <a href="/barrows">Barrows</a>
+        <table id="fliptable", class="display">
             <thead>
-                <tr>
-                    <th>Recipe Name</th>
-                    <th>Amount Produced</th>
-                    <th>Cost</th>
-                    <th>Sell At</th>
-                    <th>Profit</th>
-                    <th>Alch Profit</th>
-                    <th>Ingredients</th>
-                    <th>Level Required</th>
-                    <th>Skill/Category</th>
-                    <th>GE Tracker</th>
-                </tr>
+                <th>Item</th>
+                <th>Members</th>
+                <th>Low</th>
+                <th>High</th>
+                <th>Margin</th>
+                <th>High Alch</th>
+                <th>Alch Profit</th>
+                <th>GE Tracker</th>
             </thead>
             <tbody>
-                {% for recipe in recipes %}
+                {% for item in items %}
                     <tr>
-                        <td>{{ recipe[2].capitalize() }}</td>
-                        <td>{{ recipe[3] }}</td>
-                        <td>{{ recipe[9] }}</td>
-                        <td>{{ recipe[8] }}</td>
-                        <td>{{ recipe[7] }}</td>
-                        <td>{{ recipe[10] }}</td>
-                        <td><a href="/ingredients?id={{ recipe[4] }}&recipename={{ recipe[2].capitalize() }}">Ingredients</a></td>
-                        <td>{{ recipe[5] }}</td>
-                        <td>{{ recipe[6] }}</td>
-                        <td><a href="https://www.ge-tracker.com/item/{{ recipe[1] }}" target="_blank">Link</a></td>
+                        <!-- name -->
+                        <td>{{ item[0] }}</td>
+                        <!-- members -->
+                        <td>{{ item[6] }}</td>
+                        <!-- low -->
+                        <td>{{ item[1] }}</td>
+                        <!-- high -->
+                        <td>{{ item[2] }}</td>
+                        <!-- margin -->
+                        <td>{{ item[3] }}</td>
+                        <!-- alch -->
+                        <td>{{ item[4] }}</td>
+                        <!-- alchprofit -->
+                        <td>{{ item[7] }}</td>
+                        <!-- tracker -->
+                        <td><a href="https://www.ge-tracker.com/item/{{ item[5] }}">Link</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
             <tfoot>
-                <tr>
-                    <th>Recipe Name</th>
-                    <th>Amount Produced</th>
-                    <th>Cost</th>
-                    <th>Sell At</th>
-                    <th>Profit</th>
-                    <th>Alch Profit</th>
-                    <th>Ingredients</th>
-                    <th>Level Required</th>
-                    <th>Skill/Category</th>
-                    <th></th>
-                </tr>
+                <th>Item</th>
+                <th>Members</th>
+                <th>Low</th>
+                <th>High</th>
+                <th>Margin</th>
+                <th>High Alch</th>
+                <th>Alch Profit</th>
+                <th>GE Tracker</th>
             </tfoot>
         </table>
         <script type="text/javascript">
             $(document).ready( function () {
-                $('#recipetable').DataTable({
+                $('#fliptable').DataTable({
                     "columnDefs": [
                         {
                             "render": function(data, type, row) {
                                 return commaSeparateNumber(data);
                             },
-                            "targets": [2, 3, 4, 5]
+                            "targets": [2, 3, 4, 5, 6]
                         },
                         {
                             "type": "currency",
-                            "targets": [2, 3, 4, 5]
+                            "targets": [2, 3, 4, 5, 6]
                         }
                     ],
                     initComplete: function() {
