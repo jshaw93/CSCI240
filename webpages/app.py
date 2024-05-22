@@ -169,8 +169,7 @@ def flips():
     for item in itemResult:
         # Structure (name, low, high, margin, alch, id, membs)
         itemID = item[0]
-        low = getLowPrice(itemID)
-        high = getHighPrice(itemID)
+        low, high = getBothPrice(itemID)
         if low is None or high is None:
             continue
         alch = item[2]
@@ -181,7 +180,8 @@ def flips():
         membs = "Yes" if membs == 1 else "No"
         margin = round((high - low) - high * 0.1) - 1
         alchProfit = alch - low
-        items.append((name, low, high, margin, alch, itemID, membs, alchProfit))
+        geLimit = item[4]
+        items.append((name, low, high, margin, alch, itemID, membs, alchProfit, geLimit))
     return render_template('flips.html', items=items)
 
 
@@ -247,6 +247,17 @@ def getHighPrice(itemID):
     except KeyError:
         pass
     return sell
+
+
+def getBothPrice(itemID):
+    priceLow = None
+    priceHigh = None
+    try:
+        priceLow = int(priceData['data'][str(itemID)]['low'])
+        priceHigh = int(priceData['data'][str(itemID)]['high'])
+    except KeyError:
+        pass
+    return (priceLow, priceHigh)
 
 
 def getName(itemID, cursor):

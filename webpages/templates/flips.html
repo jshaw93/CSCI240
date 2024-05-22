@@ -18,10 +18,11 @@
         <a href="/items">Items</a><br/>
         <a href="/">Recipes</a><br/>
         <a href="/barrows">Barrows</a>
-        <table id="fliptable", class="display">
+        <table id="fliptable", class="display", style="width:100%">
             <thead>
                 <th>Item</th>
                 <th>Members</th>
+                <th>Limit</th>
                 <th>Low</th>
                 <th>High</th>
                 <th>Margin</th>
@@ -36,6 +37,8 @@
                         <td>{{ item[0] }}</td>
                         <!-- members -->
                         <td>{{ item[6] }}</td>
+                        <!-- limit -->
+                        <td>{{ item[8] }}</td>
                         <!-- low -->
                         <td>{{ item[1] }}</td>
                         <!-- high -->
@@ -54,6 +57,7 @@
             <tfoot>
                 <th>Item</th>
                 <th>Members</th>
+                <th>Limit</th>
                 <th>Low</th>
                 <th>High</th>
                 <th>Margin</th>
@@ -65,16 +69,18 @@
         <script type="text/javascript">
             $(document).ready( function () {
                 $('#fliptable').DataTable({
+                    "paging": true,
+                    "orderClasses": true,
                     "columnDefs": [
                         {
                             "render": function(data, type, row) {
                                 return commaSeparateNumber(data);
                             },
-                            "targets": [2, 3, 4, 5, 6]
+                            "targets": [2, 3, 4, 5, 6, 7]
                         },
                         {
                             "type": "currency",
-                            "targets": [2, 3, 4, 5, 6]
+                            "targets": [2, 3, 4, 5, 6, 7]
                         }
                     ],
                     initComplete: function() {
@@ -83,6 +89,9 @@
                             .every(function () {
                                 let column = this;
                                 let title = column.footer().textContent;
+                                if(title != 'Members' && title != 'Item') {
+                                    return;
+                                }
                                 let input = document.createElement('input');
                                 input.placeholder = title;
                                 column.footer().replaceChildren(input);
