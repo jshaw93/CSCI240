@@ -85,6 +85,8 @@
                             .every(function () {
                                 let column = this;
                                 let title = column.footer().textContent;
+                                let allowed = ["Recipe Name", "Skill/Category"];
+                                if(allowed.indexOf(title) === -1) {return;}
                                 let input = document.createElement('input');
                                 input.placeholder = title;
                                 column.footer().replaceChildren(input);
@@ -94,6 +96,18 @@
                                     }
                                 });
                             });
+                    },
+                    "rowCallback": function(row, data, index) {
+                        if(data[4]<1) {
+                            $(row).find('td:eq(4)').css('color', 'red');
+                        } else {
+                            $(row).find('td:eq(4)').css('color', 'green');
+                        }
+                        if(data[5]<1) {
+                            $(row).find('td:eq(5)').css('color', 'red');
+                        } else {
+                            $(row).find('td:eq(5)').css('color', 'green');
+                        }
                     }
                 });
             } );

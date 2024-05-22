@@ -34,7 +34,7 @@
                 {% for item in items %}
                     <tr>
                         <!-- name -->
-                        <td>{{ item[0] }}</td>
+                        <td><a href="https://oldschool.runescape.wiki/w/Special:Lookup?type=item&id={{ item[5] }}" target="_blank">{{ item[0] }}</a></td>
                         <!-- members -->
                         <td>{{ item[6] }}</td>
                         <!-- limit -->
@@ -101,6 +101,18 @@
                                     }
                                 });
                             });
+                    },
+                    "rowCallback": function(row, data, index) {
+                        if(data[5]<1) {
+                            $(row).find('td:eq(5)').css('color', 'red');
+                        } else {
+                            $(row).find('td:eq(5)').css('color', 'green');
+                        }
+                        if(data[7]<1) {
+                            $(row).find('td:eq(7)').css('color', 'red');
+                        } else {
+                            $(row).find('td:eq(7)').css('color', 'green');
+                        }
                     }
                 });
             } );
