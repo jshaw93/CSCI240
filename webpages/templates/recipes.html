@@ -36,7 +36,7 @@
             <tbody>
                 {% for recipe in recipes %}
                     <tr>
-                        <td>{{ recipe[2].capitalize() }}</td>
+                        <td><a href="https://oldschool.runescape.wiki/w/Special:Lookup?type=item&id={{ recipe[11] }}" target="_blank">{{ recipe[2].capitalize() }}</a></td>
                         <td>{{ recipe[3] }}</td>
                         <td>{{ recipe[9] }}</td>
                         <td>{{ recipe[8] }}</td>

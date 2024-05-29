@@ -75,6 +75,7 @@ def recipes():
         cursor.execute(alchquery, (recipeID, ))
         alch = cursor.fetchone()[0] - nature - sells[2]
         recipe.append(alch)
+        recipe.append(recipeID)
         recipe = tuple(recipe)
         newRecipes.append(recipe)
         
@@ -223,8 +224,8 @@ def getProfit(recipeID, recipeAmt, ingredients):
         except KeyError:
             pass
     try:
-        recipeSell = int(priceData['data'][str(recipeID)]['high']) - recipeCost
-        recipeSell = recipeAmt * round(recipeSell - (recipeSell * 0.01)) - 1
+        recipeSell = recipeAmt * int(priceData['data'][str(recipeID)]['high']) - recipeCost
+        recipeSell = round(recipeSell - (recipeSell * 0.01)) - 1
         sellAt = int(priceData['data'][str(recipeID)]['high'])
     except KeyError:
         pass
