@@ -181,7 +181,7 @@ def flips():
         membs = "Yes" if membs == 1 else "No"
         margin = round((high - low) - high * 0.1) - 1
         alchProfit = alch - low
-        geLimit = item[4]
+        geLimit = item[4] if item[4] is not None else -1
         items.append((name, low, high, margin, alch, itemID, membs, alchProfit, geLimit))
     return render_template('flips.html', items=items)
 
