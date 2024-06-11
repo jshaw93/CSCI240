@@ -168,22 +168,48 @@ def flips():
     cursor.execute(query)
     itemResult = cursor.fetchall()
     for item in itemResult:
-        # Structure (name, low, high, margin, alch, id, membs)
         itemID = item[0]
         low, high = getBothPrice(itemID)
         if low is None or high is None:
             continue
         alch = item[2]
+        nat = getLowPrice(561)
         name = item[3]
         if '3rd age' in name:
             continue
         membs = item[1]
         membs = "Yes" if membs == 1 else "No"
         margin = round((high - low) - high * 0.1) - 1
-        alchProfit = alch - low
+        alchProfit = alch - low - nat
         geLimit = item[4] if item[4] is not None else -1
-        items.append((name, low, high, margin, alch, itemID, membs, alchProfit, geLimit))
+        items.append((name, margin, itemID, membs, alchProfit, geLimit))
     return render_template('flips.html', items=items)
+
+
+@app.route('/detailed', methods=['GET'])
+def detailed():
+    db = mysql.connector.connect(
+        host=os.getenv('DBHOST'),
+        user=os.getenv('DBUSER'),
+        password=os.getenv('DBPASS'),
+        database=os.getenv('DB')
+    )
+    cursor = db.cursor()
+    itemID = request.args.get('id')
+    query = ('select * from Item where ItemID=%s')
+    cursor.execute(query, (itemID, ))
+    item = cursor.fetchone()
+    item = list(item)
+    low, high = getBothPrice(item[0])
+    margin = round((high - low) - high * 0.1) - 1
+    if item[4] is None:
+        item[4] = -1
+    alch = item[2]
+    nat = getLowPrice(561)
+    alchprofit = alch - low - nat
+    item.extend([low, high, margin, alchprofit, nat])
+    item = tuple(item)
+    return render_template('detailed.html', item=item)
 
 
 def latest():

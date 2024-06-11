@@ -24,34 +24,28 @@
                 <th>Item</th>
                 <th>Members</th>
                 <th>Limit</th>
-                <th>Low</th>
-                <th>High</th>
                 <th>Margin</th>
-                <th>High Alch</th>
                 <th>Alch Profit</th>
+                <th>Detailed</th>
                 <th>GE Tracker</th>
             </thead>
             <tbody>
                 {% for item in items %}
                     <tr>
                         <!-- name -->
-                        <td><a href="https://oldschool.runescape.wiki/w/Special:Lookup?type=item&id={{ item[5] }}" target="_blank">{{ item[0] }}</a></td>
+                        <td><a href="https://oldschool.runescape.wiki/w/Special:Lookup?type=item&id={{ item[2] }}" target="_blank">{{ item[0] }}</a></td>
                         <!-- members -->
-                        <td>{{ item[6] }}</td>
-                        <!-- limit -->
-                        <td>{{ item[8] }}</td>
-                        <!-- low -->
-                        <td>{{ item[1] }}</td>
-                        <!-- high -->
-                        <td>{{ item[2] }}</td>
-                        <!-- margin -->
                         <td>{{ item[3] }}</td>
-                        <!-- alch -->
-                        <td>{{ item[4] }}</td>
+                        <!-- limit -->
+                        <td>{{ item[5] }}</td>
+                        <!-- margin -->
+                        <td>{{ item[1] }}</td>
                         <!-- alchprofit -->
-                        <td>{{ item[7] }}</td>
+                        <td>{{ item[4] }}</td>
+                        <!-- detailed -->
+                        <td><a href="/detailed?id={{ item[2] }}" target="_blank">Link</a></td>
                         <!-- tracker -->
-                        <td><a href="https://www.ge-tracker.com/item/{{ item[5] }}" target="_blank">Link</a></td>
+                        <td><a href="https://www.ge-tracker.com/item/{{ item[2] }}" target="_blank">Link</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -59,11 +53,9 @@
                 <th>Item</th>
                 <th>Members</th>
                 <th>Limit</th>
-                <th>Low</th>
-                <th>High</th>
                 <th>Margin</th>
-                <th>High Alch</th>
                 <th>Alch Profit</th>
+                <th>Detailed</th>
                 <th>GE Tracker</th>
             </tfoot>
         </table>
@@ -77,42 +69,23 @@
                             "render": function(data, type, row) {
                                 return commaSeparateNumber(data);
                             },
-                            "targets": [2, 3, 4, 5, 6, 7]
+                            "targets": [2, 3, 4]
                         },
                         {
                             "type": "currency",
-                            "targets": [2, 3, 4, 5, 6, 7]
+                            "targets": [2, 3, 4]
                         }
                     ],
-                    initComplete: function() {
-                        this.api()
-                            .columns()
-                            .every(function () {
-                                let column = this;
-                                let title = column.footer().textContent;
-                                if(title != 'Members' && title != 'Item') {
-                                    return;
-                                }
-                                let input = document.createElement('input');
-                                input.placeholder = title;
-                                column.footer().replaceChildren(input);
-                                input.addEventListener('keyup', () => {
-                                    if (column.search() !== this.value) {
-                                        column.search(input.value).draw();
-                                    }
-                                });
-                            });
-                    },
                     "rowCallback": function(row, data, index) {
-                        if(data[5]<1) {
-                            $(row).find('td:eq(5)').css('color', 'red');
+                        if(data[3]<1) {
+                            $(row).find('td:eq(3)').css('color', 'red');
                         } else {
-                            $(row).find('td:eq(5)').css('color', 'green');
+                            $(row).find('td:eq(3)').css('color', 'green');
                         }
-                        if(data[7]<1) {
-                            $(row).find('td:eq(7)').css('color', 'red');
+                        if(data[4]<1) {
+                            $(row).find('td:eq(4)').css('color', 'red');
                         } else {
-                            $(row).find('td:eq(7)').css('color', 'green');
+                            $(row).find('td:eq(4)').css('color', 'green');
                         }
                     }
                 });

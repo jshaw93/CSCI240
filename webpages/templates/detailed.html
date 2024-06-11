@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Item Details</title>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+				text-align: center;
+            }
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+        <script type="text/javascript" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="//cdn.datatables.net/plug-ins/2.0.7/sorting/currency.js"></script>
+    </head>
+    <body>
+        <h1>Details</h1>
+        <a href="/items">Items</a><br/>
+        <a href="/">Recipes</a><br/>
+        <a href="/barrows">Barrows</a><br/>
+        <p>If Limit shows -1 the GE Limit is unknown for the item.  Please help the OSRS Wiki team find the values for these items!</p>
+        <table id="detailtable", class="display", style="width:100%">
+            <thead>
+                <th>Name</th>
+                <th>Members</th>
+                <th>Limit</th>
+                <th>Low</th>
+                <th>High</th>
+                <th>Margin</th>
+                <th>High Alch<br/>Nat Price: {{ item[9] }}</th>
+                <th>Alch Profit</th>
+                <th>GE Tracker</th>
+            </thead>
+            <tbody>
+                <!-- name -->
+                <td><a href="https://oldschool.runescape.wiki/w/Special:Lookup?type=item&id={{ item[0] }}" target="_blank">{{ item[3] }}</a></td>
+                <!-- membs -->
+                <td>{{ 'Yes' if item[1] else 'No' }}</td>
+                <!-- limit -->
+                <td>{{ item[4] }}</td>
+                <!-- low -->
+                <td>{{ item[5] }}</td>
+                <!-- high -->
+                <td>{{ item[6] }}</td>
+                <!-- margin -->
+                <td>{{ item[7] }}</td>
+                <!-- alch -->
+                <td>{{ item[2] }}</td>
+                <!-- alchprofit -->
+                <td>{{ item[8] }}</td>
+                <!-- getracker -->
+                <td><a href="https://www.ge-tracker.com/item/{{ item[0] }}" target="_blank">Link</a></td>
+            </tbody>
+        </table>
+        <script type="text/javascript">
+            $(document).ready( function () {
+                $('#detailtable').DataTable({
+                    "paging": true,
+                    "orderClasses": true,
+                    "columnDefs": [
+                        {
+                            "render": function(data, type, row) {
+                                return commaSeparateNumber(data);
+                            },
+                            "targets": [2, 3, 4, 5, 6, 7]
+                        },
+                        {
+                            "type": "currency",
+                            "targets": [2, 3, 4, 5, 6, 7]
+                        }
+                    ],
+                    initComplete: function() {
+                        this.api()
+                            .columns()
+                            .every(function () {
+                                let column = this;
+                                let title = column.footer().textContent;
+                                if(title != 'Members' && title != 'Item') {
+                                    return;
+                                }
+                                let input = document.createElement('input');
+                                input.placeholder = title;
+                                column.footer().replaceChildren(input);
+                                input.addEventListener('keyup', () => {
+                                    if (column.search() !== this.value) {
+                                        column.search(input.value).draw();
+                                    }
+                                });
+                            });
+                    },
+                    "rowCallback": function(row, data, index) {
+                        if(data[5]<1) {
+                            $(row).find('td:eq(5)').css('color', 'red');
+                        } else {
+                            $(row).find('td:eq(5)').css('color', 'green');
+                        }
+                        if(data[7]<1) {
+                            $(row).find('td:eq(7)').css('color', 'red');
+                        } else {
+                            $(row).find('td:eq(7)').css('color', 'green');
+                        }
+                    }
+                });
+            } );
+            function commaSeparateNumber(val) {
+                while (/(\d+)(\d{3})/.test(val.toString())) {
+                     val = val.toString().replace(/(\d+)(\d{3})/, '$1' + ',' + '$2');
+                }
+                return val;
+            }
+        </script>
+    </body>
+</html>
