@@ -18,6 +18,7 @@
         <a href="/items">Items</a><br/>
         <a href="/">Recipes</a><br/>
         <a href="/barrows">Barrows</a><br/>
+        <a href="/shops">Shop Flipping</a><br/>
         <p>If Limit shows -1 the GE Limit is unknown for the item.  Please help the OSRS Wiki team find the values for these items!</p>
         <table id="detailtable", class="display", style="width:100%">
             <thead>
@@ -32,24 +33,26 @@
                 <th>GE Tracker</th>
             </thead>
             <tbody>
-                <!-- name -->
-                <td><a href="https://oldschool.runescape.wiki/w/Special:Lookup?type=item&id={{ item[0] }}" target="_blank">{{ item[3] }}</a></td>
-                <!-- membs -->
-                <td>{{ 'Yes' if item[1] else 'No' }}</td>
-                <!-- limit -->
-                <td>{{ item[4] }}</td>
-                <!-- low -->
-                <td>{{ item[5] }}</td>
-                <!-- high -->
-                <td>{{ item[6] }}</td>
-                <!-- margin -->
-                <td>{{ item[7] }}</td>
-                <!-- alch -->
-                <td>{{ item[2] }}</td>
-                <!-- alchprofit -->
-                <td>{{ item[8] }}</td>
-                <!-- getracker -->
-                <td><a href="https://www.ge-tracker.com/item/{{ item[0] }}" target="_blank">Link</a></td>
+                <tr>
+                    <!-- name -->
+                    <td><a href="https://oldschool.runescape.wiki/w/Special:Lookup?type=item&id={{ item[0] }}" target="_blank">{{ item[3] }}</a></td>
+                    <!-- membs -->
+                    <td>{{ 'Yes' if item[1] else 'No' }}</td>
+                    <!-- limit -->
+                    <td>{{ item[4] }}</td>
+                    <!-- low -->
+                    <td>{{ item[5] }}</td>
+                    <!-- high -->
+                    <td>{{ item[6] }}</td>
+                    <!-- margin -->
+                    <td>{{ item[7] }}</td>
+                    <!-- alch -->
+                    <td>{{ item[2] }}</td>
+                    <!-- alchprofit -->
+                    <td>{{ item[8] }}</td>
+                    <!-- getracker -->
+                    <td><a href="https://www.ge-tracker.com/item/{{ item[0] }}" target="_blank">Link</a></td>
+                </tr>
             </tbody>
         </table>
         <script type="text/javascript">

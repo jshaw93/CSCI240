@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Flips</title>
+        <title>Shops</title>
         <style>
             table, th, td {
                 border: 1px solid black;
@@ -14,49 +14,47 @@
         <script type="text/javascript" src="//cdn.datatables.net/plug-ins/2.0.7/sorting/currency.js"></script>
     </head>
     <body>
-        <h1>Item Flipping & Alching</h1>
+        <h1>Shop Flipping</h1>
         <a href="/items">Items</a><br/>
         <a href="/">Recipes</a><br/>
         <a href="/barrows">Barrows</a><br/>
-        <a href="/shops">Shop Flipping</a><br/>
-        <p>If Limit shows -1 the GE Limit is unknown for the item.  Please help the OSRS Wiki team find the values for these items!</p>
+        <a href="/flips">Flipping & Alching</a>
         <table id="fliptable", class="display", style="width:100%">
             <thead>
                 <th>Item</th>
-                <th>Members</th>
-                <th>Limit</th>
-                <th>Margin</th>
-                <th>Alch Profit</th>
-                <th>Detailed</th>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>Sell</th>
+                <th>Profit</th>
+                <th>Shop</th>
                 <th>GE Tracker</th>
             </thead>
             <tbody>
                 {% for item in items %}
                     <tr>
-                        <!-- name -->
-                        <td><a href="https://oldschool.runescape.wiki/w/Special:Lookup?type=item&id={{ item[2] }}" target="_blank">{{ item[0] }}</a></td>
-                        <!-- members -->
-                        <td>{{ item[3] }}</td>
-                        <!-- limit -->
-                        <td>{{ item[5] }}</td>
-                        <!-- margin -->
+                        <!-- item -->
+                        <td><a href="https://oldschool.runescape.wiki/w/Special:Lookup?type=item&id={{ item[5] }}" target="_blank">{{ item[0] }}</a></td>
+                        <!-- stock -->
+                        <td>{{ item[6] }}</td>
+                        <!-- price -->
                         <td>{{ item[1] }}</td>
-                        <!-- alchprofit -->
-                        <td>{{ item[4] }}</td>
-                        <!-- detailed -->
-                        <td><a href="/detailed?id={{ item[2] }}" target="_blank">Link</a></td>
-                        <!-- tracker -->
-                        <td><a href="https://www.ge-tracker.com/item/{{ item[2] }}" target="_blank">Link</a></td>
+                        <!-- sell -->
+                        <td>{{ item[2] }}</td>
+                        <!-- profit -->
+                        <td>{{ item[3] }}</td>
+                        <!-- shop -->
+                        <td><a href="https://oldschool.runescape.wiki/w/Special:Lookup?type=object&name={{ item[4] }}" target="_blank">{{ item[4] }}</a></td>
+                        <!-- ge tracker -->
+                        <td><a href="https://www.ge-tracker.com/item/{{ item[5] }}" target="_blank">Link</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
             <tfoot>
                 <th>Item</th>
-                <th>Members</th>
-                <th>Limit</th>
-                <th>Margin</th>
-                <th>Alch Profit</th>
-                <th>Detailed</th>
+                <th>Price</th>
+                <th>Sell</th>
+                <th>Profit</th>
+                <th>Shop</th>
                 <th>GE Tracker</th>
             </tfoot>
         </table>
@@ -70,19 +68,14 @@
                             "render": function(data, type, row) {
                                 return commaSeparateNumber(data);
                             },
-                            "targets": [2, 3, 4]
+                            "targets": [1, 2, 3, 4]
                         },
                         {
                             "type": "currency",
-                            "targets": [2, 3, 4]
+                            "targets": [1, 2, 3, 4]
                         }
                     ],
                     "rowCallback": function(row, data, index) {
-                        if(data[3]<1) {
-                            $(row).find('td:eq(3)').css('color', 'red');
-                        } else {
-                            $(row).find('td:eq(3)').css('color', 'green');
-                        }
                         if(data[4]<1) {
                             $(row).find('td:eq(4)').css('color', 'red');
                         } else {

@@ -212,6 +212,37 @@ def detailed():
     return render_template('detailed.html', item=item)
 
 
+@app.route('/shops', methods=['GET'])
+def shops():
+    items = None
+    db = mysql.connector.connect(
+        host=os.getenv('DBHOST'),
+        user=os.getenv('DBUSER'),
+        password=os.getenv('DBPASS'),
+        database=os.getenv('DB')
+    )
+    cursor = db.cursor()
+    query = ("""select I.ItemID, SI.ItemPrice, SI.ShopItemID, SI.ItemStock from ShopItems SI
+             right join Item I on I.ItemID=SI.ItemID
+             where SI.ItemPrice is not null;""")
+    cursor.execute(query)
+    data = cursor.fetchall()
+    items = [] # name, price, sell, profit, shop, itemid, stock
+    for item in data:
+        itemid, price, shopid, stock = item
+        query = ('select ItemName from Item where ItemID=%s')
+        cursor.execute(query, (itemid, ))
+        name = cursor.fetchone()[0]
+        sell = getHighPrice(itemid)
+        profit = round(sell - price - (sell * 0.01)) - 1
+        query = ('select ShopName from Shops where ShopID=%s')
+        cursor.execute(query, (shopid, ))
+        shopname = cursor.fetchone()[0]
+        items.append((name, price, sell, profit, shopname, itemid, stock))
+    items = tuple(items)
+    return render_template('shops.html', items=items)
+
+
 def latest():
     """
 
